@@ -9,7 +9,7 @@ class ProductController extends Controller
 {
     public function index()
     {
-        // check if the use is authenticated and which group the user belongs to
+        // check if the user is authenticated and which group the user belongs to
         $group_ids = Auth::check() ? Auth::user()->getGroups() : [1];
 
         // fetch data from products table

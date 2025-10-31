@@ -3,9 +3,10 @@
 namespace App\Models;
 
 // use Illuminate\Contracts\Auth\MustVerifyEmail;
-use Illuminate\Notifications\Notifiable;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Foundation\Auth\User as Authenticatable;
+use Illuminate\Notifications\Notifiable;
 
 class User extends Authenticatable
 {
@@ -46,29 +47,27 @@ class User extends Authenticatable
         ];
     }
 
-
-
     /**
-     *  =============== RELATIONSHIPS  ===============
+     *  =============== RELATIONSHIPS  ===============.
      */
-
-
-    /**
-     *  =============== SCOPES  ===============
-     */
-
-
-    /**
-     *  =============== FUNCTIONS  ===============
-     */
-
-    public function getGroups(): array
+    public function products(): BelongsToMany
     {
-        return [];
+        return $this->belongsToMany(Product::class, 'cart', 'user_id', 'product_id')
+            ->withPivot('id', 'quantity')
+            ->withTimestamps();
     }
 
+    /**
+     *  =============== SCOPES  ===============.
+     */
 
+    /**
+     *  =============== FUNCTIONS  ===============.
+     */
+    public function getGroups(): array
+    {
+        $group_ids = [1];
 
-
-
+        return $group_ids;
+    }
 }
