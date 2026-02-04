@@ -50,4 +50,6 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/checkout/{payment}/testing', [CheckoutPaymentController::class, 'index'])->name('checkout.success.testing');
 
     Route::get('/checkout/success/{id}', [CheckoutSuccessController::class, 'index'])->name('checkout.success');
+
+    Route::get('/quests', function () {return view('pages.default.quests'); })->name('quests');
 });
