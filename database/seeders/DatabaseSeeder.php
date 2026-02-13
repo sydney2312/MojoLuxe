@@ -18,6 +18,7 @@ class DatabaseSeeder extends Seeder
             AddressSeeder::class,
             ShippingSeeder::class,
             AppSeeder::class,
+            PetSeeder::class,
         ]);
     }
 }
