@@ -13,7 +13,7 @@
 <nav>
     <a href="{{ route('home') }}" class="logo">MojoLux</a>
     <div class="nav-links">
-        <a href="{{ route('home.index') }}">Homegit </a>
+        <a href="{{ route('home.index') }}">Home </a>
         <a href="{{ route('store.index') }}">Collections</a>
         <a href="{{ route('stylelab') }}">Style Lab</a>
         <a href="{{ route('wagclub') }}">Wag Club</a>
