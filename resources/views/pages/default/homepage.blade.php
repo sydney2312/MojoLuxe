@@ -13,8 +13,8 @@
     <a href="{{ route('home') }}" class="logo">MojoLux</a>
     <div class="nav-links">
         <a href="{{ route('store.index') }}">Collections</a>
-        <a href="{{ route('stylelab') }}">Style Lab</a>
-        <a href="{{ route('wagclub') }}">Wag Club</a>
+        <a href="{{ route('dressup') }}">Style Lab</a>
+        <a href="{{ route('wagclub.index') }}">Wag Club</a>
         <a href="{{ route('cart.index') }}">Cart</a>
         @auth
             <a href="{{ route('profile.index') }}">Profile</a>
@@ -86,7 +86,7 @@
     <div class="action-content">
       <h2>Style Your Dog</h2>
       <p>Create the perfect look with our Style Lab.</p>
-      <a href="{{ route('stylelab') }}" class="btn primary">Go to Style Lab</a>
+      <a href="{{ route('dressup') }}" class="btn primary">Go to Style Lab</a>
     </div>
   </section>
 
@@ -95,7 +95,7 @@
     <div class="action-content">
       <h2>Earn Rewards</h2>
       <p>Join the Wag Club and unlock exclusive perks.</p>
-      <a href="{{ route('wagclub') }}" class="btn primary">Join Wag Club</a>
+      <a href="{{ route('wagclub.index') }}" class="btn primary">Join Wag Club</a>
     </div>
   </section>
 
@@ -104,7 +104,7 @@
     <div class="banner-content">
       <h2>The Mojolux Box</h2>
       <p>Curated outfits, grooming essentials, and a special toy for your pup.</p>
-      <a href="{{ route('wagclub') }}" class="btn primary">Join Wag Club</a>
+      <a href="{{ route('wagclub.index') }}" class="btn primary">Join Wag Club</a>
     </div>
   </section>
 

@@ -38,11 +38,10 @@ class User extends Authenticatable
     public function products(): BelongsToMany
     {
         return $this->belongsToMany(Product::class, 'cart', 'user_id', 'product_id')
-            ->withPivot('id', 'quantity')
-            ->withTimestamps();
+                    ->withPivot('id', 'quantity')
+                    ->withTimestamps();
     }
 
-    // ADD THIS
     public function pet(): HasOne
     {
         return $this->hasOne(Pet::class);

@@ -78,8 +78,8 @@
             <div class="nav-right">
                 <a href="{{ route('home.index') }}">Home</a>
                 <a href="{{ route('store.index') }}">Collections</a>
-                <a href="{{ route('stylelab') }}">Style Lab</a>
-                <a href="{{ route('wagclub') }}">Wag Club</a>
+                <a href="{{ route('dressup') }}">Style Lab</a>
+                <a href="{{ route('wagclub.index') }}">Wag Club</a>
 
                 @guest
                     @if (Route::has('login'))

@@ -6,6 +6,7 @@ use App\Http\Controllers\CheckoutPaymentController;
 use App\Http\Controllers\CheckoutSuccessController;
 use App\Http\Controllers\DetailController;
 use App\Http\Controllers\HomeController;
+use App\Http\Controllers\MojoluxBoxController;
 use App\Http\Controllers\PetController;
 use App\Http\Controllers\ProductController;
 use App\Http\Controllers\ProfileController;
@@ -33,9 +34,12 @@ Route::get('/store/details/{id}', [DetailController::class, 'index'])->name('sto
 Route::get('/shop/details/{id}', [DetailController::class, 'index'])->name('shop.details');
 
 // Static pages
-Route::get('/wag-club', fn () => view('pages.default.wagclub'))->name('wagclub');
-Route::get('/style-lab', fn () => view('pages.default.stylelab'))->name('stylelab');
+
+Route::get('/wag-club', fn () => view('pages.default.wagclub'))->name('wagclub.index');
+// updated to controller
+Route::get('/dressup', fn () => view('pages.default.dressup'))->name('dressup');
 Route::get('/quests', fn () => view('pages.default.quests'))->name('quests');
+Route::get('/mojoluxbox', fn () => view('pages.default.mojoluxbox'))->name('mojoluxbox');
 
 /*
 |--------------------------------------------------------------------------
@@ -64,4 +68,11 @@ Route::middleware(['auth'])->group(function () {
     Route::post('/checkout/payment/{payment}/1', [CheckoutPaymentController::class, 'index'])->name('checkout.stripe');
     Route::get('/checkout/{payment}/testing', [CheckoutPaymentController::class, 'index'])->name('checkout.success.testing');
     Route::get('/checkout/success/{id}', [CheckoutSuccessController::class, 'index'])->name('checkout.success');
+});
+
+// Auth required
+Route::middleware(['auth'])->group(function () {
+    Route::post('/mojoluxbox/subscribe', [MojoluxBoxController::class, 'subscribe'])->name('mojoluxbox.subscribe');
+    Route::get('/mojoluxbox/success', [MojoluxBoxController::class, 'success'])->name('mojoluxbox.success');
+    Route::post('/mojoluxbox/cancel', [MojoluxBoxController::class, 'cancel'])->name('mojoluxbox.cancel');
 });
