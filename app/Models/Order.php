@@ -12,7 +12,7 @@ class Order extends Model
     use HasFactory;
 
     /**
-     * The products that belong to the Order.
+     * Products in this order.
      */
     public function products(): BelongsToMany
     {
@@ -21,6 +21,9 @@ class Order extends Model
             ->withTimestamps();
     }
 
+    /**
+     * Order items.
+     */
     public function order_products(): HasMany
     {
         return $this->hasMany(OrderProduct::class, 'order_id');

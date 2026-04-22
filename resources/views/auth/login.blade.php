@@ -1,73 +1,247 @@
-@extends('layouts.app')
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>MojoLux — Login</title>
 
-@section('content')
-<div class="container">
-    <div class="row justify-content-center">
-        <div class="col-md-8">
-            <div class="card">
-                <div class="card-header">{{ __('Login') }}</div>
+<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
 
-                <div class="card-body">
-                    <form method="POST" action="{{ route('login') }}">
-                        @csrf
+<style>
+:root {
+  --ink:#1A1714;
+  --ink-soft:#5C5650;
+  --gold:#B8963E;
+  --gold-warm:#D4AF6A;
+  --paper:#FAF7F2;
+  --rule:#E8E0D4;
+  --white:#FFFFFF;
+  --error:#a94442;
+}
 
-                        <div class="row mb-3">
-                            <label for="email" class="col-md-4 col-form-label text-md-end">{{ __('Email Address') }}</label>
+* { margin:0; padding:0; box-sizing:border-box; }
 
-                            <div class="col-md-6">
-                                <input id="email" type="email" class="form-control @error('email') is-invalid @enderror" name="email" value="{{ old('email') }}" required autocomplete="email" autofocus>
+body {
+  font-family:'DM Sans', sans-serif;
+  background:var(--paper);
+  height:100vh;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  color:var(--ink);
+}
 
-                                @error('email')
-                                    <span class="invalid-feedback" role="alert">
-                                        <strong>{{ $message }}</strong>
-                                    </span>
-                                @enderror
-                            </div>
-                        </div>
+body::before {
+  content:"";
+  position:absolute;
+  width:600px;
+  height:600px;
+  background:radial-gradient(circle, rgba(184,150,62,0.12), transparent 60%);
+  top:-200px; left:-200px;
+  filter:blur(40px);
+}
 
-                        <div class="row mb-3">
-                            <label for="password" class="col-md-4 col-form-label text-md-end">{{ __('Password') }}</label>
+body::after {
+  content:"";
+  position:absolute;
+  width:500px;
+  height:500px;
+  background:radial-gradient(circle, rgba(0,0,0,0.04), transparent 70%);
+  bottom:-200px; right:-200px;
+  filter:blur(50px);
+}
 
-                            <div class="col-md-6">
-                                <input id="password" type="password" class="form-control @error('password') is-invalid @enderror" name="password" required autocomplete="current-password">
+.login-card {
+  width:420px;
+  background:var(--white);
+  border:1px solid var(--rule);
+  border-radius:16px;
+  padding:40px;
+  box-shadow:0 25px 60px rgba(26,23,20,0.08);
+  position:relative;
+  z-index:2;
+}
 
-                                @error('password')
-                                    <span class="invalid-feedback" role="alert">
-                                        <strong>{{ $message }}</strong>
-                                    </span>
-                                @enderror
-                            </div>
-                        </div>
+.brand {
+  text-align:center;
+  margin-bottom:30px;
+}
 
-                        <div class="row mb-3">
-                            <div class="col-md-6 offset-md-4">
-                                <div class="form-check">
-                                    <input class="form-check-input" type="checkbox" name="remember" id="remember" {{ old('remember') ? 'checked' : '' }}>
+.brand h1 {
+  font-family:'DM Serif Display', serif;
+  font-size:34px;
+}
 
-                                    <label class="form-check-label" for="remember">
-                                        {{ __('Remember Me') }}
-                                    </label>
-                                </div>
-                            </div>
-                        </div>
+.brand p {
+  font-size:11px;
+  letter-spacing:2px;
+  text-transform:uppercase;
+  color:var(--gold);
+  margin-top:6px;
+}
 
-                        <div class="row mb-0">
-                            <div class="col-md-8 offset-md-4">
-                                <button type="submit" class="btn btn-primary">
-                                    {{ __('Login') }}
-                                </button>
+label {
+  font-size:11px;
+  text-transform:uppercase;
+  letter-spacing:1.5px;
+  color:var(--ink-soft);
+  display:block;
+  margin-bottom:6px;
+}
 
-                                @if (Route::has('password.request'))
-                                    <a class="btn btn-link" href="{{ route('password.request') }}">
-                                        {{ __('Forgot Your Password?') }}
-                                    </a>
-                                @endif
-                            </div>
-                        </div>
-                    </form>
-                </div>
-            </div>
-        </div>
+input {
+  width:100%;
+  padding:12px 14px;
+  margin-bottom:6px;
+  border-radius:10px;
+  border:1px solid var(--rule);
+  background:var(--paper);
+  font-size:14px;
+  outline:none;
+  transition:.2s;
+}
+
+input:focus {
+  border-color:var(--gold);
+  box-shadow:0 0 0 3px rgba(184,150,62,0.12);
+}
+
+/* error styling */
+.error {
+  font-size:12px;
+  color:var(--error);
+  margin-bottom:10px;
+}
+
+/* top error box */
+.error-box {
+  background:#fff4f4;
+  border:1px solid #f1c0c0;
+  padding:10px;
+  border-radius:8px;
+  margin-bottom:15px;
+}
+
+.btn {
+  width:100%;
+  padding:12px;
+  border:none;
+  border-radius:10px;
+  background:var(--ink);
+  color:var(--white);
+  font-weight:500;
+  letter-spacing:1px;
+  cursor:pointer;
+  transition:.25s;
+  margin-top:10px;
+}
+
+.btn:hover {
+  background:var(--gold);
+  color:var(--ink);
+  transform:translateY(-2px);
+}
+
+.extra {
+  text-align:center;
+  margin-top:14px;
+  font-size:12px;
+}
+
+.extra a {
+  color:var(--gold);
+  text-decoration:none;
+}
+
+.extra a:hover {
+  text-decoration:underline;
+}
+
+.register-box {
+  margin-top:14px;
+  text-align:center;
+}
+
+.register-box a {
+  display:inline-block;
+  margin-top:8px;
+  padding:10px 14px;
+  border:1px solid var(--gold);
+  border-radius:10px;
+  color:var(--gold);
+  text-decoration:none;
+  font-size:12px;
+  letter-spacing:1px;
+  transition:.2s;
+}
+
+.register-box a:hover {
+  background:var(--gold);
+  color:var(--ink);
+}
+</style>
+</head>
+
+<body>
+
+<div class="login-card">
+
+  <div class="brand">
+    <h1>MojoLux</h1>
+    <p>Luxury Dogwear Experience</p>
+  </div>
+
+  <!-- Global Login Error -->
+  @if ($errors->any())
+    <div class="error-box">
+      <div class="error">
+        Invalid email or password.
+      </div>
     </div>
+  @endif
+
+  <!-- Session Error  -->
+  @if(session('error'))
+    <div class="error-box">
+      <div class="error">{{ session('error') }}</div>
+    </div>
+  @endif
+
+  <form method="POST" action="{{ route('login') }}">
+    @csrf
+
+    <label>Email</label>
+    <input type="email" name="email" value="{{ old('email') }}" required>
+    @error('email')
+      <div class="error">{{ $message }}</div>
+    @enderror
+
+    <label>Password</label>
+    <input type="password" name="password" required>
+    @error('password')
+      <div class="error">{{ $message }}</div>
+    @enderror
+
+    <button class="btn" type="submit">Sign In</button>
+  </form>
+
+  <div class="extra">
+    @if (Route::has('password.request'))
+      <a href="{{ route('password.request') }}">Forgot password?</a>
+    @endif
+  </div>
+
+  <div class="register-box">
+    <div style="font-size:12px; color:var(--ink-soft);">
+      New to MojoLux?
+    </div>
+
+    @if (Route::has('register'))
+      <a href="{{ route('register') }}">Create Account</a>
+    @endif
+  </div>
+
 </div>
-@endsection
+
+</body>
+</html>

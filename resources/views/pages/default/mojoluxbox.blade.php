@@ -185,7 +185,7 @@ body { font-family:'DM Sans',sans-serif; background:var(--paper); color:var(--in
   <div class="product-detail">
     <div class="product-img">
       {{-- Replace with your image --}}
-      <img src="/images/wagclub/mojoluxbox-hero.jpg" alt="MojoLux Box">
+      <img src='template_default/images/mojolux2.png' alt="MojoLux Box">
     </div>
     <div class="product-info-block">
       <div class="section-eyebrow">

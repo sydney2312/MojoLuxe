@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
@@ -33,13 +34,13 @@ class User extends Authenticatable
     }
 
     /**
-     *  =============== RELATIONSHIPS  ===============.
+     * ================= RELATIONSHIPS =================.
      */
     public function products(): BelongsToMany
     {
         return $this->belongsToMany(Product::class, 'cart', 'user_id', 'product_id')
-                    ->withPivot('id', 'quantity')
-                    ->withTimestamps();
+            ->withPivot('id', 'quantity')
+            ->withTimestamps();
     }
 
     public function pet(): HasOne
@@ -48,16 +49,49 @@ class User extends Authenticatable
     }
 
     /**
-     *  =============== SCOPES  ===============.
+     * 🧾 ORDERS.
      */
+    public function orders(): HasMany
+    {
+        return $this->hasMany(Order::class, 'user_id');
+    }
 
     /**
-     *  =============== FUNCTIONS  ===============.
+     * 🪙 POINTS SYSTEM.
+     */
+    public function pointsWallet(): HasOne
+    {
+        return $this->hasOne(PointsWallet::class);
+    }
+
+    public function quizAnswers(): HasMany
+    {
+        return $this->hasMany(UserQuizAnswer::class);
+    }
+
+    public function gameScores(): HasMany
+    {
+        return $this->hasMany(UserGameScore::class);
+    }
+
+    /**
+     * 🧠 GROUPS.
      */
     public function getGroups(): array
     {
-        $group_ids = [1];
+        return [1];
+    }
 
-        return $group_ids;
+    /**
+     * ================= BOOT =================.
+     */
+    protected static function booted()
+    {
+        static::created(function ($user) {
+            PointsWallet::create([
+                'user_id' => $user->id,
+                'points_balance' => 0,
+            ]);
+        });
     }
 }

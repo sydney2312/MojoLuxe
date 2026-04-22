@@ -12,9 +12,9 @@ return Application::configure(basePath: dirname(__DIR__))
         health: '/up',
     )
     ->withMiddleware(function (Middleware $middleware) {
-        // Source: https://laravel.com/docs/11.x/middleware#middleware-aliases
+        // Middleware aliases
         $middleware->alias([
-            'isAdmin' => AdminMiddleware::class
+            'admin' => AdminMiddleware::class
         ]);
     })
     ->withExceptions(function (Exceptions $exceptions) {

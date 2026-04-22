@@ -13,32 +13,44 @@ class Product extends Model
     use HasFactory;
 
     /**
-     * Create a new Eloquent Collection instance.
-     *
-     * @param array<int, \Illuminate\Database\Eloquent\Model> $models
-     *
-     * @return \Illuminate\Database\Eloquent\Collection<int, \Illuminate\Database\Eloquent\Model>
+     * Custom collection.
      */
     public function newCollection(array $models = []): Collection
     {
         return new ProductCollectionHelper($models);
     }
 
+    /**
+     * Scope: With prices.
+     */
     public function scopeWithPrices(Builder $query, array $group_ids = [1])
     {
         $query->where('products.id', '>', 0);
     }
 
+    /**
+     * Scope: single product.
+     */
     public function scopeSingleProduct(Builder $query, int $id)
     {
         $query->where('products.id', $id);
     }
 
+    /**
+     * Product image URL (FIXED).
+     */
     public function getImage()
     {
-        return asset('storage'.$this->image_path.$this->image_name);
+        if (!$this->image_name) {
+            return asset('images/placeholder.png'); // fallback
+        }
+
+        return asset('storage/images/products/'.$this->image_name);
     }
 
+    /**
+     * Price helpers.
+     */
     public function getPrice()
     {
         return $this->price;
@@ -54,6 +66,9 @@ class Product extends Model
         return $this->getPrice() * $this->pivot->quantity;
     }
 
+    /**
+     * Product link.
+     */
     public function getLink()
     {
         return route('shop.details', ['id' => $this->id]);

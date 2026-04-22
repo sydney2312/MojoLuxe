@@ -2,16 +2,23 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Order;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
 class ProfileController extends Controller
 {
-    // Show user profile + pet
+    // Show user profile + pet + orders
     public function index()
     {
-        $user = Auth::user()->load('pet'); // load the single pet relationship
-        return view('pages.profile.index', compact('user'));
+        $user = Auth::user();
+
+        // explicitly fetch orders for THIS user (more reliable than load relation)
+        $orders = Order::where('user_id', $user->id)
+            ->latest()
+            ->get();
+
+        return view('pages.profile.index', compact('user', 'orders'));
     }
 
     // Update user info
@@ -26,6 +33,8 @@ class ProfileController extends Controller
 
         $user->update($validated);
 
-        return redirect()->route('profile.index')->with('success', 'Profile updated!');
+        return redirect()
+            ->route('profile.index')
+            ->with('success', 'Profile updated!');
     }
 }

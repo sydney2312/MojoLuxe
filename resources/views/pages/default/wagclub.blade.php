@@ -185,12 +185,19 @@ body { font-family:'DM Sans',sans-serif; background:var(--paper); color:var(--in
 <!-- NAV -->
 <nav class="nav-bar">
   <div class="nav-content">
-    <a href="{{ route('home') }}" class="logo">MojoLux</a>
+
+    <a href="{{ route('home') }}" class="logo">
+      Mojo<span style="color: var(--gold); font-style: italic;">Lux</span>
+    </a>
+
     <div class="nav-links">
       <a href="{{ route('home') }}">Home</a>
       <a href="{{ route('store.index') }}">Collections</a>
+      <a href="{{ route('dressup') }}">Style Lab</a>
+      <a href="{{ route('wagclub.index') }}">Wag Club</a>
       <a href="{{ route('cart.index') }}">Cart</a>
     </div>
+
   </div>
 </nav>
 
@@ -221,7 +228,7 @@ body { font-family:'DM Sans',sans-serif; background:var(--paper); color:var(--in
     <div class="feature-card">
       <div class="feature-card-img">
         {{-- Replace with your image: --}}
-        <img src="/images/wagclub/dressup.jpg" alt="Dress Up Your Pet">
+        <img src='template_default/images/dressup.png' alt="Dress Up Your Pet">
       </div>
       <div class="feature-card-body">
         <div class="feature-card-cat">Virtual Stylist</div>
@@ -239,7 +246,7 @@ body { font-family:'DM Sans',sans-serif; background:var(--paper); color:var(--in
     <div class="feature-card">
       <div class="feature-card-img">
         {{-- Replace with your image: --}}
-        <img src="/images/wagclub/mojoluxbox.jpg" alt="MojoLux Box">
+        <img src='template_default/images/mojoluxbox.png'  alt="MojoLux Box">
       </div>
       <div class="feature-card-body">
         <div class="feature-card-cat">Curated Drops</div>

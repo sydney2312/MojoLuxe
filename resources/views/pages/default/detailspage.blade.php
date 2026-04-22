@@ -1,461 +1,333 @@
-<x-mylayouts.layout-default>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>{{ $data->title }} - MojoLux</title>
 
+<link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600&family=Playfair+Display:wght@500;600;700&display=swap" rel="stylesheet">
 
-    <section class="ftco-section">
-        <div class="container">
-            <div class="row">
-                <div class="col-lg-6 mb-5 ftco-animate">
-                    <a href="{{ $data->getImage() }}" class="image-popup prod-img-bg"><img src="{{ $data->getImage() }}"
-                            class="img-fluid" alt="Colorlib Template"></a>
-                </div>
-                <div class="col-lg-6 product-details pl-md-5 ftco-animate">
-                    <h3>{{ $data->title }}</h3>
-                    <div class="rating d-flex">
-                        <p class="text-left mr-4">
-                            <a href="#" class="mr-2">5.0</a>
-                            <a href="#"><span class="ion-ios-star-outline"></span></a>
-                            <a href="#"><span class="ion-ios-star-outline"></span></a>
-                            <a href="#"><span class="ion-ios-star-outline"></span></a>
-                            <a href="#"><span class="ion-ios-star-outline"></span></a>
-                            <a href="#"><span class="ion-ios-star-outline"></span></a>
-                        </p>
-                        <p class="text-left mr-4">
-                            <a href="#" class="mr-2" style="color: #000;">100 <span
-                                    style="color: #bbb;">Rating</span></a>
-                        </p>
-                        <p class="text-left">
-                            <a href="#" class="mr-2" style="color: #000;">500 <span style="color: #bbb;">Sold</span></a>
-                        </p>
-                    </div>
-                    <p class="price"><span>${{ $data->getPrice() }}</span></p>
-                    <div>
-                        {{ $data->short_description }}
-                    </div>
+<style>
+:root{
+    --bg:#f6f5f2;
+    --text:#1f1f1f;
+    --muted:#777;
+    --gold:#D4AF37;
+    --shadow: 0 10px 30px rgba(0,0,0,0.08);
+    --radius:16px;
+}
 
-                    <form action="{{ route('cart.store') }}" method="POST">
-                        @csrf
-                        @method('PUT')
+/* RESET */
+*{box-sizing:border-box;margin:0;padding:0;}
 
-                        <div class="row mt-4">
-                            <div class="w-100"></div>
+body{
+    font-family:'Nunito',sans-serif;
+    background:var(--bg);
+    color:var(--text);
+}
 
+/* ───────── NAVBAR ───────── */
+.nav-bar{
+    position:sticky;
+    top:0;
+    z-index:1000;
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    padding:1rem 3rem;
+    background:rgba(255,255,255,0.85);
+    backdrop-filter:blur(12px);
+    border-bottom:1px solid rgba(0,0,0,0.06);
+}
 
-                            <div class="input-group col-md-6 d-flex mb-3 custom-inputs">
-                                <span class="input-group-btn mr-2">
-                                    <button type="button" class="quantity-left-minus btn" data-type="minus"
-                                        data-field="">
-                                        <i class="ion-ios-remove"></i>
-                                    </button>
-                                </span>
-                                <input type="text" id="quantity" name="quantity"
-                                    class="quantity form-control input-number" value="1" min="1" max="100">
-                                <span class="input-group-btn ml-2">
-                                    <button type="button" class="quantity-right-plus btn" data-type="plus"
-                                        data-field="">
-                                        <i class="ion-ios-add"></i>
-                                    </button>
-                                </span>
-                            </div>
+.logo{
+    font-family:'Playfair Display';
+    font-size:1.8rem;
+    text-decoration:none;
+    color:var(--text);
+}
 
-                            <input type="hidden" name="product_id" value="{{ $data->id }}">
+.logo em{color:var(--gold);font-style:italic;}
 
+.nav-links{
+    display:flex;
+    align-items:center;
+    gap:1.5rem;
+}
 
-                            <div class="w-100"></div>
-                            <div class="col-md-12">
-                                <p style="color: #000;">80 piece available</p>
-                            </div>
-                        </div>
-                        <button class="btn btn-primary py-3 px-5 mr-2">Add to Cart</button>
-                        {{-- <p><a href="cart.html" class="btn btn-black py-3 px-5 mr-2">Add to Cart</a><a
-                                href="cart.html" class="btn btn-primary py-3 px-5">Buy now</a></p> --}}
-                    </form>
+.nav-links a{
+    text-decoration:none;
+    color:var(--text);
+    font-weight:600;
+    font-size:0.85rem;
+}
 
-                </div>
-            </div>
+.nav-links a:hover{
+    color:var(--gold);
+}
 
+/* PROFILE */
+.nav-profile{position:relative;}
 
+.nav-profile-trigger{
+    background:none;
+    border:none;
+    font-size:0.85rem;
+    font-weight:600;
+    cursor:pointer;
+    display:flex;
+    align-items:center;
+    gap:5px;
+}
 
+.nav-dropdown{
+    position:absolute;
+    top:120%;
+    right:0;
+    background:white;
+    border:1px solid #eee;
+    border-radius:12px;
+    box-shadow:var(--shadow);
+    min-width:160px;
+    display:none;
+    overflow:hidden;
+}
 
-            <div class="row mt-5">
-                <div class="col-md-12 nav-link-wrap">
-                    <div class="nav nav-pills d-flex text-center" id="v-pills-tab" role="tablist"
-                        aria-orientation="vertical">
-                        <a class="nav-link ftco-animate active mr-lg-1" id="v-pills-1-tab" data-toggle="pill"
-                            href="#v-pills-1" role="tab" aria-controls="v-pills-1" aria-selected="true">Description</a>
+.nav-profile.open .nav-dropdown{
+    display:block;
+}
 
-                        <a class="nav-link ftco-animate mr-lg-1" id="v-pills-2-tab" data-toggle="pill" href="#v-pills-2"
-                            role="tab" aria-controls="v-pills-2" aria-selected="false">Manufacturer</a>
+.nav-dropdown a,
+.nav-dropdown button{
+    display:block;
+    width:100%;
+    padding:10px 14px;
+    text-align:left;
+    border:none;
+    background:none;
+    font-size:0.85rem;
+    cursor:pointer;
+    text-decoration:none;
+    color:var(--text);
+}
 
-                        <a class="nav-link ftco-animate" id="v-pills-3-tab" data-toggle="pill" href="#v-pills-3"
-                            role="tab" aria-controls="v-pills-3" aria-selected="false">Reviews</a>
+.nav-dropdown a:hover,
+.nav-dropdown button:hover{
+    background:#faf7f2;
+    color:var(--gold);
+}
 
-                    </div>
-                </div>
-                <div class="col-md-12 tab-wrap">
+/* ───────── PRODUCT PAGE ───────── */
+.container{
+    max-width:1100px;
+    margin:3rem auto;
+    padding:0 1.5rem;
+}
 
-                    <div class="tab-content bg-light" id="v-pills-tabContent">
+.product-grid{
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    gap:3rem;
+    align-items:center;
+}
 
-                        <div class="tab-pane fade show active" id="v-pills-1" role="tabpanel"
-                            aria-labelledby="day-1-tab">
-                            <div class="p-4">
-                                <h3 class="mb-4">Nike Free RN 2019 iD</h3>
-                                <p>On her way she met a copy. The copy warned the Little Blind Text, that where it came
-                                    from it would have been rewritten a thousand times and everything that was left from
-                                    its origin would be the word "and" and the Little Blind Text should turn around and
-                                    return to its own, safe country. But nothing the copy said could convince her and so
-                                    it didn’t take long until a few insidious Copy Writers ambushed her, made her drunk
-                                    with Longe and Parole and dragged her into their agency, where they abused her for
-                                    their.</p>
-                            </div>
-                        </div>
+.image-box img{
+    width:100%;
+    border-radius:var(--radius);
+    box-shadow:var(--shadow);
+}
 
-                        <div class="tab-pane fade" id="v-pills-2" role="tabpanel" aria-labelledby="v-pills-day-2-tab">
-                            <div class="p-4">
-                                <h3 class="mb-4">Manufactured By Nike</h3>
-                                <p>On her way she met a copy. The copy warned the Little Blind Text, that where it came
-                                    from it would have been rewritten a thousand times and everything that was left from
-                                    its origin would be the word "and" and the Little Blind Text should turn around and
-                                    return to its own, safe country. But nothing the copy said could convince her and so
-                                    it didn’t take long until a few insidious Copy Writers ambushed her, made her drunk
-                                    with Longe and Parole and dragged her into their agency, where they abused her for
-                                    their.</p>
-                            </div>
-                        </div>
-                        <div class="tab-pane fade" id="v-pills-3" role="tabpanel" aria-labelledby="v-pills-day-3-tab">
-                            <div class="row p-4">
-                                <div class="col-md-7">
-                                    <h3 class="mb-4">23 Reviews</h3>
-                                    <div class="review">
-                                        <div class="user-img"
-                                            style="background-image: url({{ asset('template_default/images/person_1.jpg') }})">
-                                        </div>
-                                        <div class="desc">
-                                            <h4>
-                                                <span class="text-left">Jacob Webb</span>
-                                                <span class="text-right">14 March 2018</span>
-                                            </h4>
-                                            <p class="star">
-                                                <span>
-                                                    <i class="ion-ios-star-outline"></i>
-                                                    <i class="ion-ios-star-outline"></i>
-                                                    <i class="ion-ios-star-outline"></i>
-                                                    <i class="ion-ios-star-outline"></i>
-                                                    <i class="ion-ios-star-outline"></i>
-                                                </span>
-                                                <span class="text-right"><a href="#" class="reply"><i
-                                                            class="icon-reply"></i></a></span>
-                                            </p>
-                                            <p>When she reached the first hills of the Italic Mountains, she had a last
-                                                view back on the skyline of her hometown Bookmarksgrov</p>
-                                        </div>
-                                    </div>
-                                    <div class="review">
-                                        <div class="user-img"
-                                            style="background-image: url({{ asset('template_default/images/person_2.jpg') }})">
-                                        </div>
-                                        <div class="desc">
-                                            <h4>
-                                                <span class="text-left">Jacob Webb</span>
-                                                <span class="text-right">14 March 2018</span>
-                                            </h4>
-                                            <p class="star">
-                                                <span>
-                                                    <i class="ion-ios-star-outline"></i>
-                                                    <i class="ion-ios-star-outline"></i>
-                                                    <i class="ion-ios-star-outline"></i>
-                                                    <i class="ion-ios-star-outline"></i>
-                                                    <i class="ion-ios-star-outline"></i>
-                                                </span>
-                                                <span class="text-right"><a href="#" class="reply"><i
-                                                            class="icon-reply"></i></a></span>
-                                            </p>
-                                            <p>When she reached the first hills of the Italic Mountains, she had a last
-                                                view back on the skyline of her hometown Bookmarksgrov</p>
-                                        </div>
-                                    </div>
-                                    <div class="review">
-                                        <div class="user-img"
-                                            style="background-image: url('{{ asset('template_default/images/person_3.jpg') }}')">
-                                        </div>
-                                        <div class="desc">
-                                            <h4>
-                                                <span class="text-left">Jacob Webb</span>
-                                                <span class="text-right">14 March 2018</span>
-                                            </h4>
-                                            <p class="star">
-                                                <span>
-                                                    <i class="ion-ios-star-outline"></i>
-                                                    <i class="ion-ios-star-outline"></i>
-                                                    <i class="ion-ios-star-outline"></i>
-                                                    <i class="ion-ios-star-outline"></i>
-                                                    <i class="ion-ios-star-outline"></i>
-                                                </span>
-                                                <span class="text-right"><a href="#" class="reply"><i
-                                                            class="icon-reply"></i></a></span>
-                                            </p>
-                                            <p>When she reached the first hills of the Italic Mountains, she had a last
-                                                view back on the skyline of her hometown Bookmarksgrov</p>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="col-md-4">
-                                    <div class="rating-wrap">
-                                        <h3 class="mb-4">Give a Review</h3>
-                                        <p class="star">
-                                            <span>
-                                                <i class="ion-ios-star-outline"></i>
-                                                <i class="ion-ios-star-outline"></i>
-                                                <i class="ion-ios-star-outline"></i>
-                                                <i class="ion-ios-star-outline"></i>
-                                                <i class="ion-ios-star-outline"></i>
-                                                (98%)
-                                            </span>
-                                            <span>20 Reviews</span>
-                                        </p>
-                                        <p class="star">
-                                            <span>
-                                                <i class="ion-ios-star-outline"></i>
-                                                <i class="ion-ios-star-outline"></i>
-                                                <i class="ion-ios-star-outline"></i>
-                                                <i class="ion-ios-star-outline"></i>
-                                                <i class="ion-ios-star-outline"></i>
-                                                (85%)
-                                            </span>
-                                            <span>10 Reviews</span>
-                                        </p>
-                                        <p class="star">
-                                            <span>
-                                                <i class="ion-ios-star-outline"></i>
-                                                <i class="ion-ios-star-outline"></i>
-                                                <i class="ion-ios-star-outline"></i>
-                                                <i class="ion-ios-star-outline"></i>
-                                                <i class="ion-ios-star-outline"></i>
-                                                (98%)
-                                            </span>
-                                            <span>5 Reviews</span>
-                                        </p>
-                                        <p class="star">
-                                            <span>
-                                                <i class="ion-ios-star-outline"></i>
-                                                <i class="ion-ios-star-outline"></i>
-                                                <i class="ion-ios-star-outline"></i>
-                                                <i class="ion-ios-star-outline"></i>
-                                                <i class="ion-ios-star-outline"></i>
-                                                (98%)
-                                            </span>
-                                            <span>0 Reviews</span>
-                                        </p>
-                                        <p class="star">
-                                            <span>
-                                                <i class="ion-ios-star-outline"></i>
-                                                <i class="ion-ios-star-outline"></i>
-                                                <i class="ion-ios-star-outline"></i>
-                                                <i class="ion-ios-star-outline"></i>
-                                                <i class="ion-ios-star-outline"></i>
-                                                (98%)
-                                            </span>
-                                            <span>0 Reviews</span>
-                                        </p>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
+.details-box h1{
+    font-family:'Playfair Display';
+    font-size:2.4rem;
+}
+
+.meta{
+    display:flex;
+    gap:1rem;
+    color:var(--muted);
+    margin:1rem 0;
+}
+
+.price{
+    font-size:2rem;
+    color:var(--gold);
+    font-weight:700;
+    margin:1rem 0;
+}
+
+.desc{
+    color:#555;
+    margin-bottom:2rem;
+}
+
+.qty-box{
+    display:flex;
+    align-items:center;
+    gap:10px;
+    margin-bottom:1rem;
+}
+
+.qty-box button{
+    padding:10px 14px;
+    border:none;
+    background:#eee;
+    border-radius:10px;
+    cursor:pointer;
+}
+
+.qty-box input{
+    width:60px;
+    text-align:center;
+    padding:8px;
+    border:1px solid #ddd;
+    border-radius:10px;
+}
+
+.btn{
+    display:inline-block;
+    padding:12px 22px;
+    background:#1c1c1c;
+    color:white;
+    border-radius:12px;
+    text-decoration:none;
+    cursor:pointer;
+}
+
+.btn:hover{
+    background:var(--gold);
+}
+
+.back-btn{
+    display:inline-block;
+    margin-top:2rem;
+    padding:10px 14px;
+    border:1px solid #ddd;
+    border-radius:12px;
+    text-decoration:none;
+    color:var(--text);
+}
+
+.back-btn:hover{
+    border-color:var(--gold);
+    color:var(--gold);
+}
+
+/* RESPONSIVE */
+@media(max-width:900px){
+    .product-grid{
+        grid-template-columns:1fr;
+    }
+
+    .nav-bar{
+        padding:1rem 1.2rem;
+    }
+}
+</style>
+</head>
+
+<body>
+
+<!-- NAVBAR -->
+<nav class="nav-bar">
+    <a href="{{ route('home') }}" class="logo">Mojo<em>Lux</em></a>
+
+    <div class="nav-links">
+        <a href="{{ route('store.index') }}">Collections</a>
+        <a href="{{ route('dressup') }}">Style Lab</a>
+        <a href="{{ route('wagclub.index') }}">Wag Club</a>
+        <a href="{{ route('cart.index') }}">Cart</a>
+
+        @auth
+        <div class="nav-profile">
+            <button class="nav-profile-trigger" onclick="toggleProfile()">
+                Profile ▾
+            </button>
+
+            <div class="nav-dropdown">
+                <a href="{{ route('profile.index') }}">My Profile</a>
+                <a href="{{ route('wagclub.index') }}">Wag Club</a>
+                <form method="POST" action="{{ route('logout') }}">
+                    @csrf
+                    <button type="submit">Sign Out</button>
+                </form>
             </div>
         </div>
-    </section>
+        @else
+        <a href="{{ route('login') }}">Sign In</a>
+        @endauth
+    </div>
+</nav>
 
+<!-- PRODUCT -->
+<div class="container">
 
+    <div class="product-grid">
 
-
-    {{-- Recommended Products --}}
-    <section class="ftco-section bg-light">
-        <div class="container">
-            <div class="row justify-content-center mb-3 pb-3">
-                <div class="col-md-12 heading-section text-center ftco-animate">
-                    <h2 class="mb-4">Ralated Products</h2>
-                    <p>Far far away, behind the word mountains, far from the countries Vokalia and Consonantia</p>
-                </div>
-            </div>
+        <div class="image-box">
+            <img src="{{ $data->getImage() }}" alt="{{ $data->title }}">
         </div>
-        <div class="container">
-            <div class="row">
 
+        <div class="details-box">
 
-                <div class="col-sm-12 col-md-12 col-lg-3 ftco-animate d-flex fadeInUp ftco-animated">
-                    <div class="product d-flex flex-column">
-                        <a href="#" class="img-prod"><img class="img-fluid"
-                                src="http://localhost:8000/storage/images/products/iphone1-4.jpg"
-                                alt="Colorlib Template">
-                            <span class="status">50% Off</span>
-                            <div class="overlay"></div>
-                        </a>
-                        <div class="text py-3 pb-4 px-3">
-                            <div class="d-flex">
-                                <div class="cat">
-                                    <span>gold</span>
-                                </div>
-                                <div class="rating">
-                                    <p class="text-right mb-0">
-                                        <a href="#"><span class="ion-ios-star-outline"></span></a>
-                                        <a href="#"><span class="ion-ios-star-outline"></span></a>
-                                        <a href="#"><span class="ion-ios-star-outline"></span></a>
-                                        <a href="#"><span class="ion-ios-star-outline"></span></a>
-                                        <a href="#"><span class="ion-ios-star-outline"></span></a>
-                                    </p>
-                                </div>
-                            </div>
-                            <h3><a href="http://localhost:8000/details/1">Iure qui debitis quia autem ut</a></h3>
-                            <div class="pricing">
+            <h1>{{ $data->title }}</h1>
 
-                                <span class="price-sale">$379.00</span>
-                                <p></p>
-                            </div>
-                            <p class="bottom-area d-flex px-3">
-                                <a href="http://localhost:8000/cart/add/1"
-                                    class="add-to-cart text-center py-2 mr-1"><span>Add to cart <i
-                                            class="ion-ios-add ml-1"></i></span></a>
-                                <a href="http://localhost:8000/details/1"
-                                    class="buy-now text-center py-2">Details<span><i
-                                            class="ion-ios-cart ml-1"></i></span></a>
-                            </p>
-                        </div>
-                    </div>
-                </div>
-
-
-                <div class="col-sm-12 col-md-12 col-lg-3 ftco-animate d-flex fadeInUp ftco-animated">
-                    <div class="product d-flex flex-column">
-                        <a href="#" class="img-prod"><img class="img-fluid"
-                                src="http://localhost:8000/storage/images/products/iphone1-4.jpg"
-                                alt="Colorlib Template">
-                            <span class="status">50% Off</span>
-                            <div class="overlay"></div>
-                        </a>
-                        <div class="text py-3 pb-4 px-3">
-                            <div class="d-flex">
-                                <div class="cat">
-                                    <span>gold</span>
-                                </div>
-                                <div class="rating">
-                                    <p class="text-right mb-0">
-                                        <a href="#"><span class="ion-ios-star-outline"></span></a>
-                                        <a href="#"><span class="ion-ios-star-outline"></span></a>
-                                        <a href="#"><span class="ion-ios-star-outline"></span></a>
-                                        <a href="#"><span class="ion-ios-star-outline"></span></a>
-                                        <a href="#"><span class="ion-ios-star-outline"></span></a>
-                                    </p>
-                                </div>
-                            </div>
-                            <h3><a href="http://localhost:8000/details/1">Iure qui debitis quia autem ut</a></h3>
-                            <div class="pricing">
-
-                                <span class="price-sale">$379.00</span>
-                                <p></p>
-                            </div>
-                            <p class="bottom-area d-flex px-3">
-                                <a href="http://localhost:8000/cart/add/1"
-                                    class="add-to-cart text-center py-2 mr-1"><span>Add to cart <i
-                                            class="ion-ios-add ml-1"></i></span></a>
-                                <a href="http://localhost:8000/details/1"
-                                    class="buy-now text-center py-2">Details<span><i
-                                            class="ion-ios-cart ml-1"></i></span></a>
-                            </p>
-                        </div>
-                    </div>
-                </div>
-
-
-                <div class="col-sm-12 col-md-12 col-lg-3 ftco-animate d-flex fadeInUp ftco-animated">
-                    <div class="product d-flex flex-column">
-                        <a href="#" class="img-prod"><img class="img-fluid"
-                                src="http://localhost:8000/storage/images/products/iphone1-4.jpg"
-                                alt="Colorlib Template">
-                            <span class="status">50% Off</span>
-                            <div class="overlay"></div>
-                        </a>
-                        <div class="text py-3 pb-4 px-3">
-                            <div class="d-flex">
-                                <div class="cat">
-                                    <span>gold</span>
-                                </div>
-                                <div class="rating">
-                                    <p class="text-right mb-0">
-                                        <a href="#"><span class="ion-ios-star-outline"></span></a>
-                                        <a href="#"><span class="ion-ios-star-outline"></span></a>
-                                        <a href="#"><span class="ion-ios-star-outline"></span></a>
-                                        <a href="#"><span class="ion-ios-star-outline"></span></a>
-                                        <a href="#"><span class="ion-ios-star-outline"></span></a>
-                                    </p>
-                                </div>
-                            </div>
-                            <h3><a href="http://localhost:8000/details/1">Iure qui debitis quia autem ut</a></h3>
-                            <div class="pricing">
-
-                                <span class="price-sale">$379.00</span>
-                                <p></p>
-                            </div>
-                            <p class="bottom-area d-flex px-3">
-                                <a href="http://localhost:8000/cart/add/1"
-                                    class="add-to-cart text-center py-2 mr-1"><span>Add to cart <i
-                                            class="ion-ios-add ml-1"></i></span></a>
-                                <a href="http://localhost:8000/details/1"
-                                    class="buy-now text-center py-2">Details<span><i
-                                            class="ion-ios-cart ml-1"></i></span></a>
-                            </p>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="col-sm-12 col-md-12 col-lg-3 ftco-animate d-flex fadeInUp ftco-animated">
-                    <div class="product d-flex flex-column">
-                        <a href="#" class="img-prod"><img class="img-fluid"
-                                src="http://localhost:8000/storage/images/products/iphone1-4.jpg"
-                                alt="Colorlib Template">
-                            <span class="status">50% Off</span>
-                            <div class="overlay"></div>
-                        </a>
-                        <div class="text py-3 pb-4 px-3">
-                            <div class="d-flex">
-                                <div class="cat">
-                                    <span>gold</span>
-                                </div>
-                                <div class="rating">
-                                    <p class="text-right mb-0">
-                                        <a href="#"><span class="ion-ios-star-outline"></span></a>
-                                        <a href="#"><span class="ion-ios-star-outline"></span></a>
-                                        <a href="#"><span class="ion-ios-star-outline"></span></a>
-                                        <a href="#"><span class="ion-ios-star-outline"></span></a>
-                                        <a href="#"><span class="ion-ios-star-outline"></span></a>
-                                    </p>
-                                </div>
-                            </div>
-                            <h3><a href="http://localhost:8000/details/1">Iure qui debitis quia autem ut</a></h3>
-                            <div class="pricing">
-
-                                <span class="price-sale">$379.00</span>
-                                <p></p>
-                            </div>
-                            <p class="bottom-area d-flex px-3">
-                                <a href="http://localhost:8000/cart/add/1"
-                                    class="add-to-cart text-center py-2 mr-1"><span>Add to cart <i
-                                            class="ion-ios-add ml-1"></i></span></a>
-                                <a href="http://localhost:8000/details/1"
-                                    class="buy-now text-center py-2">Details<span><i
-                                            class="ion-ios-cart ml-1"></i></span></a>
-                            </p>
-                        </div>
-                    </div>
-                </div>
-
-
-
+            <div class="meta">
+                <span>⭐ 5.0</span>
+                <span>100 Ratings</span>
+                <span>500 Sold</span>
             </div>
+
+            <div class="price">
+                ${{ $data->getPrice() }}
+            </div>
+
+            <p class="desc">
+                {{ $data->short_description }}
+            </p>
+
+            <form action="{{ route('cart.store') }}" method="POST">
+                @csrf
+                @method('PUT')
+
+                <input type="hidden" name="product_id" value="{{ $data->id }}">
+
+                <div class="qty-box">
+                    <button type="button" onclick="changeQty(-1)">−</button>
+                    <input type="text" id="quantity" name="quantity" value="1">
+                    <button type="button" onclick="changeQty(1)">+</button>
+                </div>
+
+                <button class="btn">Add to Cart</button>
+            </form>
+
+            <a href="{{ route('store.index') }}" class="back-btn">
+                ← Back to Collections
+            </a>
+
         </div>
-    </section>
-    {{-- Recommended Products --}}
+    </div>
 
+</div>
 
+<script>
+function changeQty(val){
+    let input = document.getElementById('quantity');
+    let current = parseInt(input.value) || 1;
+    input.value = Math.max(1, current + val);
+}
 
-</x-mylayouts.layout-default>
+function toggleProfile(){
+    document.querySelector('.nav-profile').classList.toggle('open');
+}
+
+document.addEventListener('click', function(e){
+    const profile = document.querySelector('.nav-profile');
+    if(profile && !profile.contains(e.target)){
+        profile.classList.remove('open');
+    }
+});
+</script>
+
+</body>
+</html>

@@ -19,6 +19,7 @@ class DatabaseSeeder extends Seeder
             ShippingSeeder::class,
             AppSeeder::class,
             PetSeeder::class,
+            DailyQuizSeeder::class,
         ]);
     }
 }
